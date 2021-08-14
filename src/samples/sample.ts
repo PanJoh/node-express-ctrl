@@ -4,13 +4,11 @@ import { addController } from "../controller";
 import bodyParser from "body-parser";
 import { NextFunction, Request, Response, Router } from "express";
 import { container as globalContainer, inject, injectable, Lifecycle } from 'tsyringe';
-import { addContainer } from "../application";
+import { createApp } from "../application";
 import { User, UserNotFoundError, UserRepository } from "./user-repository";
 
-const app = Express();
 const container = globalContainer.createChildContainer();
-addContainer(app, container);
-
+const app = createApp(container);
 
 const UserCtrlNameSym = Symbol('user-controller-name');
 
