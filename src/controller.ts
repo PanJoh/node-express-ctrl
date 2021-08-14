@@ -5,7 +5,6 @@ import { Constructor } from './decorators';
 import { httpActionsKey } from './meta-keys';
 import { container as globalContainer, DependencyContainer } from 'tsyringe';
 import { RequestEx } from './application';
-import { RequestSym, ResponseSym } from './injection-syms';
 
 type AddHandler = (router: Router, route: string, handler: HttpRequestHandler) => void;
 type HttpRequestHandler = (req: Express.Request, resp: Express.Response, next: NextFunction) => void;
@@ -25,10 +24,7 @@ function getContainer(req: RequestEx): DependencyContainer {
 function wrapAction<T>(ctor: Constructor<T>, httpAction: HttpAction): HttpRequestHandler {
     return (req: Express.Request, resp: Express.Response, next: Express.NextFunction) => {
         const container = getContainer(req);
-        const requestContainer = container.createChildContainer();
-        requestContainer.register<Express.Request>(RequestSym, {useValue: req});
-        requestContainer.register<Express.Response>(ResponseSym, {useValue: resp});
-        const ctrl = requestContainer.resolve(ctor);
+        const ctrl = container.resolve(ctor);
         try {
             const res = httpAction.execute(ctrl, req);
             if (res instanceof Promise) {
