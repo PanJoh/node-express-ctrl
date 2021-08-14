@@ -1,5 +1,6 @@
-import { DependencyContainer } from 'tsyringe';
+import { DependencyContainer, container as globalContainer } from 'tsyringe';
 import { Express as ExpressApp } from 'express-serve-static-core';
+import express from 'express';
 import { Request, Response, NextFunction } from 'express';
 import { RequestSym, ResponseSym } from './injection-syms';
 
@@ -16,4 +17,10 @@ export function addContainer(app: ExpressApp, container: DependencyContainer): v
         reqEx.container = reqContainer;
         next();
     });
+}
+
+export function createApp(container?: DependencyContainer): ExpressApp {
+    const app = express();
+    addContainer(app, container ?? globalContainer);
+    return app;
 }
