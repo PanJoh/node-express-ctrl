@@ -1,7 +1,7 @@
 {
   "name": "express-ctrl",
   "version": "0.1.0",
-  "description": "",
+  "description": "A controller framework with dependency injection for express",
   "main": "dist/index.js",
   "types": "dist/index.d.ts",
   "scripts": {
